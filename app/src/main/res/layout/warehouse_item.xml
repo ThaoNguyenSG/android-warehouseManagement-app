@@ -7,7 +7,7 @@
         android:id="@+id/tvItemCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="itemCode" />
+        android:text="Codi de l'article: -" />
 
     <TextView
         android:id="@+id/tvDescription"
@@ -19,5 +19,5 @@
         android:id="@+id/tvStock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="stock" />
+        android:text="Estoc: -" />
 </LinearLayout>

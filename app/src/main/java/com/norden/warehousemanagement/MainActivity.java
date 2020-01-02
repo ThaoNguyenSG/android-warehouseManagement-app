@@ -1,21 +1,18 @@
 package com.norden.warehousemanagement;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 
 public class MainActivity extends ListActivity {
 
     private static int ACTIVITY_ITEM_ADD = 1;
+    private static int ACTIVITY_ITEM_UPDATE = 2;
 
     private long idActual;
 
@@ -66,6 +63,30 @@ public class MainActivity extends ListActivity {
         // Now create a simple cursor adapter and set it to display
         scItems = new adapterWarehouseManagementItems(this, R.layout.warehouse_item, cursorTasks, from, to, 1);
         setListAdapter(scItems);
+    }
+
+    private void refreshItems() {
+        Cursor cursorTasks = bd.warehouseManagement();
+
+        // Notifiquem al adapter que les dades han canviat i que refresqui
+        scItems.changeCursor(cursorTasks);
+        scItems.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACTIVITY_ITEM_ADD) {
+            if (resultCode == RESULT_OK) {
+                // Carreguem tots els articles a lo bestia
+                refreshItems();
+            }
+        }
+
+        if (requestCode == ACTIVITY_ITEM_UPDATE) {
+            if (resultCode == RESULT_OK) {
+                refreshItems();
+            }
+        }
     }
 
 }
