@@ -51,7 +51,6 @@ public class warehouseManagementDataSource {
 
     public Cursor item(long id) {
         // Retorna un cursor només amb el id indicat
-        // Retornem les tasques que el camp DONE = 1
         return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
                 WAREHOUSEMANAGEMENT_ID+ "=?", new String[]{String.valueOf(id)},
                 null, null, null);

@@ -26,16 +26,6 @@ public class warehouseManagementHelper extends SQLiteOpenHelper {
                         "stock INTEGER)";
 
         db.execSQL(CREATE_WAREHOUSEMANAGEMENT);
-
-        /*
-
-    CodiArticle, clau primària tipus TEXT que l'usuari ha d'informar alhora de crear un nou article.
-    Descripció, TEXT obligatori que defineix l'article.
-    PVP, REAL obligatori
-    ESTOC, REAL, aquest valor no serà modificable tot i que s'ha de mostrar. El valor per defecte que s'assignarà a ESTOC es 0.
-
-         */
-
     }
 
     @Override

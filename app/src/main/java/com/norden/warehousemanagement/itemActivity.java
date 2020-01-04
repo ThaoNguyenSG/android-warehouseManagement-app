@@ -8,12 +8,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class itemActivity extends Activity {
 
-    private long idTask;
+    private long idItem;
     private warehouseManagementDataSource bd;
 
     @Override
@@ -30,7 +29,7 @@ public class itemActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                aceptarCambios();
+                acceptChanges();
             }
         });
 
@@ -40,7 +39,7 @@ public class itemActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                deleteTask();
+                deleteItem();
             }
         });
 
@@ -50,30 +49,31 @@ public class itemActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                cancelarCambios();
+                cancelChanges();
             }
         });
 
         // Busquem el id que estem modificant
         // si el el id es -1 vol dir que s'està creant
-        idTask = this.getIntent().getExtras().getLong("id");
+        idItem = this.getIntent().getExtras().getLong("id");
 
-        if (idTask != -1) {
+        if (idItem != -1) {
             // Si estem modificant carreguem les dades en pantalla
-            cargarDatos();
+            loadData();
         }
     }
 
-    private void cargarDatos() {
-        // Demanem un cursor que retorna un sol registre amb les dades de la tasca
+    private void loadData() {
+        // Demanem un cursor que retorna un sol registre amb les dades de l'article
         // Això es podria fer amb un classe pero...
-        Cursor datos = bd.item(idTask);
+        Cursor datos = bd.item(idItem);
         datos.moveToFirst();
 
         // Carreguem les dades en la interfície
         TextView tv;
 
         tv = (TextView) findViewById(R.id.edtItemCode);
+        tv.setEnabled(false);
         tv.setText(datos.getString(datos.getColumnIndex(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)));
 
         tv = (TextView) findViewById(R.id.edtDescription);
@@ -86,7 +86,7 @@ public class itemActivity extends Activity {
         tv.setText(datos.getString(datos.getColumnIndex(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)));
     }
 
-    private void aceptarCambios() {
+    private void acceptChanges() {
         // Validem les dades
         TextView tv;
 
@@ -97,6 +97,12 @@ public class itemActivity extends Activity {
             myDialogs.showToast(this,"El codi de l'article ha d'estar informat");
             return;
         }
+
+        /*Cursor c = bd.item(Long.parseLong(itemCode));
+        if (c != null) {
+            myDialogs.showToast(this,"Ja existeix un article amb aquest codi");
+            return;
+        }*/
 
         // La descripció ha d'estar informada
         tv = (TextView) findViewById(R.id.edtDescription);
@@ -122,53 +128,54 @@ public class itemActivity extends Activity {
             return;
         }
 
-        // El estoc ha de ser minim 0
+        // El estoc ha de ser un enter
         tv = (TextView) findViewById(R.id.edtStock);
         int iStock;
         try {
             iStock = Integer.valueOf(tv.getText().toString());
         }
         catch (Exception e) {
-            myDialogs.showToast(this,"El PVP ha de ser un numero enter");
-            return;
-        }
-
-        if ((iStock < 0)) {
-            myDialogs.showToast(this,"El PVP ha de ser mínim 0");
+            myDialogs.showToast(this,"El estoc ha de ser un numero enter");
             return;
         }
 
         // Mirem si estem creant o estem guardant
-        if (idTask == -1) {
-            idTask = bd.itemAdd(itemCode, description, iPvp, iStock);
+        if (idItem == -1) {
+            // El estoc ha de ser mínim 0 si estem creant
+            if ((iStock < 0)) {
+                myDialogs.showToast(this,"El estoc ha de ser mínim 0");
+                return;
+            }
+
+            idItem = bd.itemAdd(itemCode, description, iPvp, iStock);
         }
         else {
-            bd.itemUpdate(idTask,itemCode, description, iPvp, iStock);
+            bd.itemUpdate(idItem,itemCode, description, iPvp, iStock);
         }
 
         Intent mIntent = new Intent();
-        mIntent.putExtra("id", idTask);
+        mIntent.putExtra("id", idItem);
         setResult(RESULT_OK, mIntent);
 
         finish();
     }
 
-    private void cancelarCambios() {
+    private void cancelChanges() {
         Intent mIntent = new Intent();
-        mIntent.putExtra("id", idTask);
+        mIntent.putExtra("id", idItem);
         setResult(RESULT_CANCELED, mIntent);
 
         finish();
     }
 
-    private void deleteTask() {
+    private void deleteItem() {
         // Pedimos confirmación
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage("¿Desitja eliminar l'article?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                bd.itemDelete(idTask);
+                bd.itemDelete(idItem);
 
                 Intent mIntent = new Intent();
                 mIntent.putExtra("id", -1);  // Devolvemos -1 indicant que s'ha eliminat

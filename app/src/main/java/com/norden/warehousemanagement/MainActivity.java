@@ -4,10 +4,12 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 public class MainActivity extends ListActivity {
 
@@ -36,7 +38,7 @@ public class MainActivity extends ListActivity {
 
             @Override
             public void onClick(View v) {
-                addTask();
+                addItem();
             }
         });
 
@@ -44,7 +46,7 @@ public class MainActivity extends ListActivity {
         loadItems();
     }
 
-    private void addTask() {
+    private void addItem() {
         // Cridem a l'activity del detall de la tasca enviant com a id -1
         Bundle bundle = new Bundle();
         bundle.putLong("id",-1);
@@ -73,6 +75,18 @@ public class MainActivity extends ListActivity {
         scItems.notifyDataSetChanged();
     }
 
+    private void updateItem(long id) {
+        // Cridem a l'activity del detall de l'article enviant com a id -1
+        Bundle bundle = new Bundle();
+        bundle.putLong("id",id);
+
+        idActual = id;
+
+        Intent i = new Intent(this, itemActivity.class );
+        i.putExtras(bundle);
+        startActivityForResult(i,ACTIVITY_ITEM_UPDATE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACTIVITY_ITEM_ADD) {
@@ -87,6 +101,14 @@ public class MainActivity extends ListActivity {
                 refreshItems();
             }
         }
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        // modifiquem el id
+        updateItem(id);
     }
 
 }
@@ -105,19 +127,15 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         // Agafem l'objecte de la view que es una LINEA DEL CURSOR
         Cursor linia = (Cursor) getItem(position);
 
-        /*
-        int done = linia.getInt(
-                linia.getColumnIndexOrThrow(warehouseManagementDataSource.TODOLIST_DONE)
+        int stock = linia.getInt(
+                linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)
         );
 
-        // Pintem el fons de la view segons està completada o no
-        if (done==1) {
-            view.setBackgroundColor(Color.parseColor(colorTaskCompleted));
+        // Si el estoc actual es 0 o negatiu la row s'ha de mostrar en color vermell de fons, si té estoc caldrà que aparegui en color blanc de fons.
+        if (stock <= 0) {
+            view.setBackgroundColor(Color.parseColor("#FF0000"));
         }
-        else {
-            view.setBackgroundColor(Color.parseColor(colorTaskPending));
-        }
-        */
+
         return view;
     }
 }
