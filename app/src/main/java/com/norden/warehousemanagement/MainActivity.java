@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends ListActivity {
 
     private static int ACTIVITY_ITEM_ADD = 1;
     private static int ACTIVITY_ITEM_UPDATE = 2;
+
+    private int iStock = 100000000;
 
     private long idActual;
 
@@ -24,7 +27,7 @@ public class MainActivity extends ListActivity {
     private static String[] from = new String[]{warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE,
             warehouseManagementDataSource.WAREHOUSEMANAGEMENT_DESCRIPTION,
             warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK};
-    private static int[] to = new int[]{R.id.tvItemCode, R.id.tvDescription, R.id.tvStock};
+    private static int[] to = new int[]{R.id.tvItemCode2, R.id.tvDescription2, R.id.tvStock2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +136,7 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
 
         // Si el estoc actual es 0 o negatiu la row s'ha de mostrar en color vermell de fons, si té estoc caldrà que aparegui en color blanc de fons.
         if (stock <= 0) {
-            view.setBackgroundColor(Color.parseColor("#FF0000"));
+            view.setBackgroundColor(Color.parseColor("#e53935"));
         }
 
         return view;

@@ -39,7 +39,7 @@ public class warehouseManagementDataSource {
     }
 
     // ******************
-    // Funcions que retornen cursors de todoList
+    // Funcions que retornen cursors de la bdd
     // ******************
 
     public Cursor warehouseManagement() {
