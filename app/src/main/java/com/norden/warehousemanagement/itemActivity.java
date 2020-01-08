@@ -61,6 +61,9 @@ public class itemActivity extends Activity {
             // Si estem modificant carreguem les dades en pantalla
             loadData();
         }
+        else {
+            btnDelete.setVisibility(View.GONE);
+        }
     }
 
     private void loadData() {
