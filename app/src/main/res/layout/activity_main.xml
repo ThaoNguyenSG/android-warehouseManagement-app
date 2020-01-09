@@ -5,18 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:paddingBottom="13dp"
-    android:paddingLeft="13dp"
-    android:paddingRight="13dp"
-    android:paddingTop="13dp" >
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/bottomLayout"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        android:paddingTop="13dp">
 
         <Button
             android:id="@+id/btnAdd"
@@ -30,8 +29,9 @@
     </LinearLayout>
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:padding="13dp"/>
 
 </LinearLayout>

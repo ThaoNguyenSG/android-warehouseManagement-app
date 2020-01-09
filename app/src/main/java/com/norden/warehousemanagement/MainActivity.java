@@ -8,11 +8,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
-public class MainActivity extends ListActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
 
     private static int ACTIVITY_ITEM_ADD = 1;
     private static int ACTIVITY_ITEM_UPDATE = 2;
@@ -33,7 +37,7 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Activity filter");
+        setTitle("Magatzem");
 
         // Botó d'afegir
         Button btn = (Button) findViewById(R.id.btnAdd);
@@ -67,7 +71,17 @@ public class MainActivity extends ListActivity {
 
         // Now create a simple cursor adapter and set it to display
         scItems = new adapterWarehouseManagementItems(this, R.layout.warehouse_item, cursorTasks, from, to, 1);
-        setListAdapter(scItems);
+
+        ListView lv = (ListView) findViewById(R.id.listView);
+
+        lv.setAdapter(scItems);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                updateItem(id);
+            }
+        });
     }
 
     private void refreshItems() {
@@ -106,13 +120,13 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
         // modifiquem el id
         updateItem(id);
-    }
+    }*/
 
 }
 
@@ -137,6 +151,9 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         // Si el estoc actual es 0 o negatiu la row s'ha de mostrar en color vermell de fons, si té estoc caldrà que aparegui en color blanc de fons.
         if (stock <= 0) {
             view.setBackgroundColor(Color.parseColor("#e53935"));
+        }
+        else if (stock > 0) {
+            view.setBackgroundColor(0x00000000);
         }
 
         return view;

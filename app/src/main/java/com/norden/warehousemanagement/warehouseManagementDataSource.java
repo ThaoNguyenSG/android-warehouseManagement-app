@@ -57,6 +57,14 @@ public class warehouseManagementDataSource {
 
     }
 
+    public Cursor itemCode(String itemCode) {
+        // Retorna un cursor només amb el id indicat
+        return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
+                WAREHOUSEMANAGEMENT_ITEMCODE+ "=?", new String[]{String.valueOf(itemCode)},
+                null, null, null);
+
+    }
+
     // ******************
     // Funcions de manipulació de dades
     // ******************

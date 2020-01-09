@@ -142,18 +142,25 @@ public class itemActivity extends Activity {
             return;
         }
 
+        tv = (TextView) findViewById(R.id.edtItemCode);
+
         // Mirem si estem creant o estem guardant
         if (idItem == -1) {
+            Cursor c = bd.itemCode(tv.getText().toString());
+            if (c.getCount() > 0) {
+                myDialogs.showToast(this, "Ja existeix un article amb aquest codi");
+                return;
+            }
             // El estoc ha de ser mínim 0 si estem creant
             if ((iStock < 0)) {
                 myDialogs.showToast(this,"El estoc ha de ser mínim 0");
                 return;
             }
 
-            idItem = bd.itemAdd(itemCode, description, iPvp, iStock);
+            idItem = bd.itemAdd(tv.getText().toString(), description, iPvp, iStock);
         }
         else {
-            bd.itemUpdate(idItem,itemCode, description, iPvp, iStock);
+            bd.itemUpdate(idItem,tv.getText().toString(), description, iPvp, iStock);
         }
 
         Intent mIntent = new Intent();
