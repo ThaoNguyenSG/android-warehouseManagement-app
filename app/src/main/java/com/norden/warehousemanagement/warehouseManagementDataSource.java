@@ -22,13 +22,13 @@ public class warehouseManagementDataSource {
         // En el constructor directament obro la comunicació amb la base de dades
         dbHelper = new warehouseManagementHelper(ctx);
 
-        // A més també construeixo dos databases un per llegir i l'altre per alterar
+        // Construeixo dos databases, un per llegir i l'altre per alterar
         open();
     }
 
     // DESTRUCTOR
     protected void finalize () {
-        // Cerramos los databases
+        // Tanquem les databases
         dbW.close();
         dbR.close();
     }
@@ -38,39 +38,49 @@ public class warehouseManagementDataSource {
         dbR = dbHelper.getReadableDatabase();
     }
 
-    // ******************
-    // Funcions que retornen cursors de la bdd
-    // ******************
+    /* FUNCIONS QUE RETORNEN CURSORS DE LA BDD */
 
+    // Retorna tots els articles
     public Cursor warehouseManagement() {
-        // Retorem totes les tasques
         return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
                 null, null,
                 null, null, WAREHOUSEMANAGEMENT_ID);
     }
 
+    // Retorna un cursor només amb el id indicat (retorna un sol article)
     public Cursor item(long id) {
-        // Retorna un cursor només amb el id indicat
         return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
                 WAREHOUSEMANAGEMENT_ID+ "=?", new String[]{String.valueOf(id)},
                 null, null, null);
 
     }
 
+    // Retorna un cursor només amb el codi de l'article indicat
     public Cursor itemCode(String itemCode) {
-        // Retorna un cursor només amb el id indicat
         return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
                 WAREHOUSEMANAGEMENT_ITEMCODE+ "=?", new String[]{String.valueOf(itemCode)},
                 null, null, null);
 
     }
 
-    // ******************
-    // Funcions de manipulació de dades
-    // ******************
+    // Retorna els articles que SI tenen stock
+    public Cursor stockIems() {
+        return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
+                WAREHOUSEMANAGEMENT_STOCK + ">" + 0, null,
+                null, null, WAREHOUSEMANAGEMENT_ID);
+    }
 
-    public long itemAdd(String itemCode, String description, int pvp, int stock) {
-        // Creem un nou article i retornem el id crear per si el necessiten
+    // Retorna els articles que NO tenen stock
+    public Cursor noStockIems() {
+        return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
+                WAREHOUSEMANAGEMENT_STOCK + "<=" + 0, null,
+                null, null, WAREHOUSEMANAGEMENT_ID);
+    }
+
+    /* FUNCIONS DE MANIPULACIÓ DE DADES */
+
+    // Creem un nou article i retornem el id creat per si el necessitem
+    public long itemAdd(String itemCode, String description, double pvp, int stock) {
         ContentValues values = new ContentValues();
         values.put(WAREHOUSEMANAGEMENT_ITEMCODE, itemCode);
         values.put(WAREHOUSEMANAGEMENT_DESCRIPTION, description);
@@ -80,8 +90,8 @@ public class warehouseManagementDataSource {
         return dbW.insert(table_WAREHOUSEMANAGEMENT,null,values);
     }
 
-    public void itemUpdate(long id, String itemCode, String description, int pvp, int stock) {
-        // Modifiquem els valors de l'item amb clau primària "id"
+    // Modifiquem els valors de l'article amb clau primària "id"
+    public void itemUpdate(long id, String itemCode, String description, double pvp, int stock) {
         ContentValues values = new ContentValues();
         values.put(WAREHOUSEMANAGEMENT_ITEMCODE, itemCode);
         values.put(WAREHOUSEMANAGEMENT_DESCRIPTION, description);
@@ -91,9 +101,11 @@ public class warehouseManagementDataSource {
         dbW.update(table_WAREHOUSEMANAGEMENT,values, WAREHOUSEMANAGEMENT_ID + " = ?", new String[] { String.valueOf(id) });
     }
 
+    // Eliminem l'item amb clau primària "id"
     public void itemDelete(long id) {
-        // Eliminem l'item amb clau primària "id"
         dbW.delete(table_WAREHOUSEMANAGEMENT,WAREHOUSEMANAGEMENT_ID + " = ?", new String[] { String.valueOf(id) });
     }
+
+
 
 }

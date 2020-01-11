@@ -1,8 +1,6 @@
 package com.norden.warehousemanagement;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,8 +20,9 @@ public class itemActivity extends Activity {
 
         bd = new warehouseManagementDataSource(this);
 
-        // Botones de aceptar y cancelar
-        // Boton ok
+        /*Botons d'acceptar i cancelar*/
+
+        // Botó d'acceptar
         Button btnOk = (Button) findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
 
@@ -33,17 +32,7 @@ public class itemActivity extends Activity {
             }
         });
 
-        // Boton eliminar
-        Button  btnDelete = (Button) findViewById(R.id.btnDelete);
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                deleteItem();
-            }
-        });
-
-        // Boton cancelar
+        // Botó de cancelar
         Button  btnCancel = (Button) findViewById(R.id.btnCancelar);
         btnCancel.setOnClickListener(new View.OnClickListener() {
 
@@ -60,9 +49,6 @@ public class itemActivity extends Activity {
         if (idItem != -1) {
             // Si estem modificant carreguem les dades en pantalla
             loadData();
-        }
-        else {
-            btnDelete.setVisibility(View.GONE);
         }
     }
 
@@ -97,48 +83,42 @@ public class itemActivity extends Activity {
         tv = (TextView) findViewById(R.id.edtItemCode);
         String itemCode = tv.getText().toString();
         if (itemCode.trim().equals("")) {
-            myDialogs.showToast(this,"El codi de l'article ha d'estar informat");
+            myDialogs.showShortToast(this,"El codi de l'article ha d'estar informat");
             return;
         }
-
-        /*Cursor c = bd.item(Long.parseLong(itemCode));
-        if (c != null) {
-            myDialogs.showToast(this,"Ja existeix un article amb aquest codi");
-            return;
-        }*/
 
         // La descripció ha d'estar informada
         tv = (TextView) findViewById(R.id.edtDescription);
         String description = tv.getText().toString();
         if (description.trim().equals("")) {
-            myDialogs.showToast(this,"La descripció ha d'estar informada");
+            myDialogs.showShortToast(this,"La descripció ha d'estar informada");
             return;
         }
 
         // El PVP ha de ser minim 0
         tv = (TextView) findViewById(R.id.edtPvp);
-        int iPvp;
+        double iPvp;
         try {
-            iPvp = Integer.valueOf(tv.getText().toString());
+            iPvp = Double.valueOf(tv.getText().toString().replaceAll(",", "."));
         }
         catch (Exception e) {
-            myDialogs.showToast(this,"El PVP ha de ser un numero enter");
+            myDialogs.showShortToast(this,"El PVP ha de ser un numero");
             return;
         }
 
         if ((iPvp < 0)) {
-            myDialogs.showToast(this,"El PVP ha de ser mínim 0");
+            myDialogs.showShortToast(this,"El PVP ha de ser mínim 0");
             return;
         }
 
-        // El estoc ha de ser un enter
+        // El stock ha de ser un numero enter
         tv = (TextView) findViewById(R.id.edtStock);
         int iStock;
         try {
             iStock = Integer.valueOf(tv.getText().toString());
         }
         catch (Exception e) {
-            myDialogs.showToast(this,"El estoc ha de ser un numero enter");
+            myDialogs.showShortToast(this,"El estoc ha de ser un numero enter");
             return;
         }
 
@@ -148,12 +128,12 @@ public class itemActivity extends Activity {
         if (idItem == -1) {
             Cursor c = bd.itemCode(tv.getText().toString());
             if (c.getCount() > 0) {
-                myDialogs.showToast(this, "Ja existeix un article amb aquest codi");
+                myDialogs.showShortToast(this, "Ja existeix un article amb aquest codi");
                 return;
             }
             // El estoc ha de ser mínim 0 si estem creant
             if ((iStock < 0)) {
-                myDialogs.showToast(this,"El estoc ha de ser mínim 0");
+                myDialogs.showShortToast(this,"El stock ha de ser mínim 0");
                 return;
             }
 
@@ -176,29 +156,6 @@ public class itemActivity extends Activity {
         setResult(RESULT_CANCELED, mIntent);
 
         finish();
-    }
-
-    private void deleteItem() {
-        // Pedimos confirmación
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage("¿Desitja eliminar l'article?");
-        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                bd.itemDelete(idItem);
-
-                Intent mIntent = new Intent();
-                mIntent.putExtra("id", -1);  // Devolvemos -1 indicant que s'ha eliminat
-                setResult(RESULT_OK, mIntent);
-
-                finish();
-            }
-        });
-
-        builder.setNegativeButton("No", null);
-
-        builder.show();
-
     }
 
 }

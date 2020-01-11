@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-smallcaps"
-            android:text="Estoc (numero)"
+            android:text="Quantitat stock"
             android:textColor="#000000" />
 
         <EditText
@@ -96,14 +96,6 @@
             android:fontFamily="sans-serif-smallcaps"
             android:text="CANCELAR" />
 
-        <Button
-            android:id="@+id/btnDelete"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#2196f3"
-            android:fontFamily="sans-serif-smallcaps"
-            android:text="ELIMINAR" />
     </LinearLayout>
 
 </LinearLayout>

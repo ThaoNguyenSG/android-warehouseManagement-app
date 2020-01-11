@@ -22,7 +22,7 @@ public class warehouseManagementHelper extends SQLiteOpenHelper {
                 "CREATE TABLE warehouseManagement ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "itemCode TEXT," +
                         "description TEXT," +
-                        "pvp INTEGER," +
+                        "pvp REAL," +
                         "stock INTEGER)";
 
         db.execSQL(CREATE_WAREHOUSEMANAGEMENT);
