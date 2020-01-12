@@ -1,14 +1,17 @@
 package com.norden.warehousemanagement;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class itemActivity extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class itemActivity extends AppCompatActivity {
 
     private long idItem;
     private warehouseManagementDataSource bd;
@@ -17,6 +20,21 @@ public class itemActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
+
+        // Busquem el id que estem modificant
+        // si el el id es -1 vol dir que s'està creant
+        idItem = this.getIntent().getExtras().getLong("id");
+
+        if (idItem != -1) {
+            setTitle("Editar article");
+        }
+        else {
+            setTitle("Afegir nou article");
+        }
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bd = new warehouseManagementDataSource(this);
 
@@ -41,10 +59,6 @@ public class itemActivity extends Activity {
                 cancelChanges();
             }
         });
-
-        // Busquem el id que estem modificant
-        // si el el id es -1 vol dir que s'està creant
-        idItem = this.getIntent().getExtras().getLong("id");
 
         if (idItem != -1) {
             // Si estem modificant carreguem les dades en pantalla
@@ -114,12 +128,18 @@ public class itemActivity extends Activity {
         // El stock ha de ser un numero enter
         tv = (TextView) findViewById(R.id.edtStock);
         int iStock;
-        try {
-            iStock = Integer.valueOf(tv.getText().toString());
+
+        if (tv.getText().toString().equals("")) {
+            iStock = 0;
         }
-        catch (Exception e) {
-            myDialogs.showShortToast(this,"El estoc ha de ser un numero enter");
-            return;
+        else {
+            try {
+                iStock = Integer.valueOf(tv.getText().toString());
+            }
+            catch (Exception e) {
+                myDialogs.showShortToast(this,"El estoc ha de ser un numero enter");
+                return;
+            }
         }
 
         tv = (TextView) findViewById(R.id.edtItemCode);
@@ -156,6 +176,25 @@ public class itemActivity extends Activity {
         setResult(RESULT_CANCELED, mIntent);
 
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.item_activity_menu, menu);
+        return true;
+    }
+
+    // Capturar pulsacions en el menú de la barra superior.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
