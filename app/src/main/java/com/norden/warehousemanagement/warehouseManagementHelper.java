@@ -22,15 +22,23 @@ public class warehouseManagementHelper extends SQLiteOpenHelper {
                 "CREATE TABLE warehouseManagement ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "itemCode TEXT," +
                         "description TEXT," +
-                        "pvp REAL," +
-                        "stock INTEGER)";
-
+                        "pvp INTEGER," +
+                        "stock TEXT)";
         db.execSQL(CREATE_WAREHOUSEMANAGEMENT);
+
+        /*String CREATE_MOVEMENT =
+                "CREATE TABLE movement ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "itemCode TEXT," +
+                        "date TEXT," +
+                        "quantity INTEGER," +
+                        "type TEXT,"+
+                        "FOREIGN KEY ("+itemCode+") REFERENCES "+warehouseManagement+"("+_id+"));";
+
+        db.execSQL(CREATE_MOVEMENT);*/
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // De moment no fem res
 
     }
 

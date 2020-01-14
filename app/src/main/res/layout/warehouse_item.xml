@@ -3,7 +3,7 @@
     xmlns:http="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="175dp">
 
     <TextView
         android:id="@+id/tvItemCode"
@@ -39,7 +39,7 @@
         android:paddingLeft="5dp"
         android:text="Stock: "
         android:textColor="#000000"
-        http:layout_constraintBottom_toTopOf="@+id/guideline9"
+        http:layout_constraintBottom_toTopOf="@+id/guideline2"
         http:layout_constraintEnd_toStartOf="@+id/guideline6"
         http:layout_constraintStart_toStartOf="parent"
         http:layout_constraintTop_toTopOf="@+id/guideline8" />
@@ -56,14 +56,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        http:layout_constraintGuide_percent="0.33" />
+        http:layout_constraintGuide_percent="0.22" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        http:layout_constraintGuide_percent="0.66" />
+        http:layout_constraintGuide_percent="0.44" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
@@ -83,7 +83,7 @@
         android:text="TextViewItemCode"
         android:textColor="#000000"
         http:layout_constraintBottom_toTopOf="@+id/guideline7"
-        http:layout_constraintEnd_toStartOf="@+id/guideline"
+        http:layout_constraintEnd_toEndOf="parent"
         http:layout_constraintStart_toStartOf="@+id/guideline6"
         http:layout_constraintTop_toTopOf="parent" />
 
@@ -97,8 +97,8 @@
         android:shadowRadius="1.6"
         android:text="TextViewStock"
         android:textColor="#000000"
-        http:layout_constraintBottom_toTopOf="@+id/guideline9"
-        http:layout_constraintEnd_toStartOf="@+id/guideline"
+        http:layout_constraintBottom_toTopOf="@+id/guideline2"
+        http:layout_constraintEnd_toEndOf="parent"
         http:layout_constraintStart_toStartOf="@+id/guideline6"
         http:layout_constraintTop_toTopOf="@+id/guideline8" />
 
@@ -113,25 +113,46 @@
         android:text="TextViewDescription"
         android:textColor="#000000"
         http:layout_constraintBottom_toTopOf="@+id/guideline8"
-        http:layout_constraintEnd_toStartOf="@+id/guideline"
+        http:layout_constraintEnd_toEndOf="parent"
         http:layout_constraintStart_toStartOf="@+id/guideline6"
         http:layout_constraintTop_toTopOf="@+id/guideline7" />
+
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        http:layout_constraintBottom_toTopOf="@+id/guideline9"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toStartOf="@+id/guideline4"
+        http:layout_constraintTop_toTopOf="@+id/guideline2"
+        http:srcCompat="@android:drawable/ic_menu_delete" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        http:layout_constraintGuide_percent="0.66" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        http:layout_constraintGuide_percent="0.85" />
+        http:layout_constraintGuide_percent="0.25" />
 
-    <ImageView
-        android:id="@+id/ivDelete"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        http:layout_constraintBottom_toTopOf="@+id/guideline8"
-        http:layout_constraintEnd_toEndOf="parent"
-        http:layout_constraintStart_toStartOf="@+id/guideline"
-        http:layout_constraintTop_toTopOf="@+id/guideline7"
-        http:srcCompat="@android:drawable/ic_menu_delete" />
+        android:orientation="vertical"
+        http:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        http:layout_constraintGuide_percent="0.75" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
