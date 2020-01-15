@@ -12,34 +12,36 @@ public class warehouseManagementHelper extends SQLiteOpenHelper {
     // database name
     private static final String database_NAME = "warehouseManagementDataBase";
 
+    private String CREATE_WAREHOUSEMANAGEMENT =
+            "CREATE TABLE warehouseManagement ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "itemCode TEXT," +
+                    "description TEXT," +
+                    "pvp INTEGER," +
+                    "stock TEXT)";
+    private String CREATE_MOVEMENT =
+            "CREATE TABLE movement ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "itemCode TEXT," +
+                    "date TEXT," +
+                    "quantity INTEGER," +
+                    "type TEXT,"+
+                    "warehouseManagementId INTEGER," +
+                    "FOREIGN KEY (warehouseManagementId) REFERENCES warehouseManagement (_id))";
+
     public warehouseManagementHelper(Context context) {
         super(context, database_NAME, null, database_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_WAREHOUSEMANAGEMENT =
-                "CREATE TABLE warehouseManagement ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "itemCode TEXT," +
-                        "description TEXT," +
-                        "pvp INTEGER," +
-                        "stock TEXT)";
         db.execSQL(CREATE_WAREHOUSEMANAGEMENT);
-
-        /*String CREATE_MOVEMENT =
-                "CREATE TABLE movement ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "itemCode TEXT," +
-                        "date TEXT," +
-                        "quantity INTEGER," +
-                        "type TEXT,"+
-                        "FOREIGN KEY ("+itemCode+") REFERENCES "+warehouseManagement+"("+_id+"));";
-
-        db.execSQL(CREATE_MOVEMENT);*/
+        db.execSQL(CREATE_MOVEMENT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 2) {
+            db.execSQL(CREATE_MOVEMENT);
+        }
     }
 
 }

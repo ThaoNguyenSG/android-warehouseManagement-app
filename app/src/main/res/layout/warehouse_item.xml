@@ -117,16 +117,6 @@
         http:layout_constraintStart_toStartOf="@+id/guideline6"
         http:layout_constraintTop_toTopOf="@+id/guideline7" />
 
-    <ImageView
-        android:id="@+id/ivDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        http:layout_constraintBottom_toTopOf="@+id/guideline9"
-        http:layout_constraintEnd_toEndOf="parent"
-        http:layout_constraintStart_toStartOf="@+id/guideline4"
-        http:layout_constraintTop_toTopOf="@+id/guideline2"
-        http:srcCompat="@android:drawable/ic_menu_delete" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -154,5 +144,45 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         http:layout_constraintGuide_percent="0.75" />
+
+    <ImageView
+        android:id="@+id/ivStockAdd"
+        android:layout_width="87dp"
+        android:layout_height="43dp"
+        http:layout_constraintBottom_toTopOf="@+id/guideline9"
+        http:layout_constraintEnd_toStartOf="@+id/guideline3"
+        http:layout_constraintStart_toStartOf="@+id/guideline"
+        http:layout_constraintTop_toTopOf="@+id/guideline2"
+        http:srcCompat="@drawable/warehouse_add" />
+
+    <ImageView
+        android:id="@+id/ivStockQuit"
+        android:layout_width="87dp"
+        android:layout_height="43dp"
+        http:layout_constraintBottom_toTopOf="@+id/guideline9"
+        http:layout_constraintEnd_toStartOf="@+id/guideline4"
+        http:layout_constraintStart_toStartOf="@+id/guideline3"
+        http:layout_constraintTop_toTopOf="@+id/guideline2"
+        http:srcCompat="@drawable/warehouse_remove" />
+
+    <ImageView
+        android:id="@+id/ivRegistry"
+        android:layout_width="87dp"
+        android:layout_height="42dp"
+        http:layout_constraintBottom_toTopOf="@+id/guideline9"
+        http:layout_constraintEnd_toStartOf="@+id/guideline"
+        http:layout_constraintStart_toStartOf="parent"
+        http:layout_constraintTop_toTopOf="@+id/guideline2"
+        http:srcCompat="@drawable/ic_history_black_24dp" />
+
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="88dp"
+        android:layout_height="42dp"
+        http:layout_constraintBottom_toTopOf="@+id/guideline9"
+        http:layout_constraintEnd_toEndOf="parent"
+        http:layout_constraintStart_toStartOf="@+id/guideline4"
+        http:layout_constraintTop_toTopOf="@+id/guideline2"
+        http:srcCompat="@drawable/ic_delete_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
