@@ -167,8 +167,8 @@
 
     <ImageView
         android:id="@+id/ivRegistry"
-        android:layout_width="87dp"
-        android:layout_height="42dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         http:layout_constraintBottom_toTopOf="@+id/guideline9"
         http:layout_constraintEnd_toStartOf="@+id/guideline"
         http:layout_constraintStart_toStartOf="parent"
