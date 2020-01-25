@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -223,16 +224,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendDialogDataToActivity(String stock, String date, boolean notAddingStock, Cursor linia) {
-        Log.e("HOLAA", "Stock: " + stock + " | Date: " + date + " | Not adding stock? " + notAddingStock);
+        //Log.e("@HOLAA", "Stock: " + stock + " | Date: " + date + " | Not adding stock? " + notAddingStock);
 
-        int stockUpdate = 0;
+        int stockUpdate;
 
         if (!notAddingStock) {
             // AFEGIR STOCK
+            bd.movementAdd(
+                    linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
+                    date,
+                    Integer.parseInt(stock),
+                    "Entrada",
+                    linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
+            );
             stockUpdate = linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) + Integer.parseInt(stock);
         }
         else {
             // TREURE STOCK
+            bd.movementAdd(
+                    linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
+                    date,
+                    -Integer.parseInt(stock),
+                    "Sortida",
+                    linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
+            );
             stockUpdate = linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) - Integer.parseInt(stock);
         }
 
@@ -242,6 +257,11 @@ public class MainActivity extends AppCompatActivity {
                 linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_DESCRIPTION)),
                 linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_PVP)),
                 stockUpdate);
+
+        /*Cursor movements = bd.movements();
+        movements.moveToFirst();
+
+        Log.e("@MOVEMENTS", DatabaseUtils.dumpCursorToString(movements));*/
 
         refreshItems();
     }
@@ -253,8 +273,6 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
     public MainActivity mainActivity;
 
     LayoutInflater mInflater;
-
-    private warehouseManagementDataSource bd;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 

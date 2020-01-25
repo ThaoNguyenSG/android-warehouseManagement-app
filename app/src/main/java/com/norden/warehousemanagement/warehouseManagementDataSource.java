@@ -14,6 +14,14 @@ public class warehouseManagementDataSource {
     public static final String WAREHOUSEMANAGEMENT_PVP = "pvp";
     public static final String WAREHOUSEMANAGEMENT_STOCK = "stock";
 
+    public static final String table_MOVEMENT = "movement";
+    public static final String MOVEMENT_ID = "_id";
+    public static final String MOVEMENT_ITEMCODE = "itemCode";
+    public static final String MOVEMENT_DATE = "date";
+    public static final String MOVEMENT_QUANTITY = "quantity";
+    public static final String MOVEMENT_TYPE = "type";
+    public static final String MOVEMENT_WAREHOUSEMANAGEMENTID = "warehouseManagementId";
+
     private warehouseManagementHelper dbHelper;
     private SQLiteDatabase dbW, dbR;
 
@@ -106,6 +114,22 @@ public class warehouseManagementDataSource {
         dbW.delete(table_WAREHOUSEMANAGEMENT,WAREHOUSEMANAGEMENT_ID + " = ?", new String[] { String.valueOf(id) });
     }
 
+    // TAULA MOVEMENT ------------------------------- :D
 
+    public long movementAdd(String itemCode, String date, int quantity, String type, int warehouseManagementId) {
+        ContentValues values = new ContentValues();
+        values.put(MOVEMENT_ITEMCODE, itemCode);
+        values.put(MOVEMENT_DATE, date);
+        values.put(MOVEMENT_QUANTITY, quantity);
+        values.put(MOVEMENT_TYPE, type);
+        values.put(MOVEMENT_WAREHOUSEMANAGEMENTID, warehouseManagementId);
 
+        return dbW.insert(table_MOVEMENT,null,values);
+    }
+
+    public Cursor movements() {
+        return dbR.query(table_MOVEMENT, new String[]{MOVEMENT_ID, MOVEMENT_ITEMCODE,MOVEMENT_DATE,MOVEMENT_QUANTITY,MOVEMENT_TYPE,MOVEMENT_WAREHOUSEMANAGEMENTID},
+                null, null,
+                null, null, MOVEMENT_ID);
+    }
 }

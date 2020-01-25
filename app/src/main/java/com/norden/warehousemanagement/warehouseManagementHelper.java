@@ -25,7 +25,7 @@ public class warehouseManagementHelper extends SQLiteOpenHelper {
                     "quantity INTEGER," +
                     "type TEXT,"+
                     "warehouseManagementId INTEGER," +
-                    "FOREIGN KEY (warehouseManagementId) REFERENCES warehouseManagement (_id))";
+                    "FOREIGN KEY (warehouseManagementId) REFERENCES warehouseManagement (_id) ON DELETE CASCADE)";
 
     public warehouseManagementHelper(Context context) {
         super(context, database_NAME, null, database_VERSION);

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -127,6 +128,8 @@ public class itemActivity extends AppCompatActivity {
 
         // El stock ha de ser un numero enter
         tv = (TextView) findViewById(R.id.edtStock);
+        //tv.setEnabled(false);
+
         int iStock;
 
         if (tv.getText().toString().equals("")) {
@@ -137,7 +140,7 @@ public class itemActivity extends AppCompatActivity {
                 iStock = Integer.valueOf(tv.getText().toString());
             }
             catch (Exception e) {
-                myDialogs.showShortToast(this,"El estoc ha de ser un numero enter");
+                myDialogs.showShortToast(this,"El stock ha de ser un numero enter");
                 return;
             }
         }
