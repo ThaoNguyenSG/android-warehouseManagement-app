@@ -129,46 +129,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        http:layout_constraintGuide_percent="0.25" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        http:layout_constraintGuide_percent="0.5" />
+        http:layout_constraintGuide_percent="0.33" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        http:layout_constraintGuide_percent="0.75" />
+        http:layout_constraintGuide_percent="0.66" />
 
     <ImageView
-        android:id="@+id/ivStockAdd"
-        android:layout_width="87dp"
-        android:layout_height="43dp"
-        http:layout_constraintBottom_toTopOf="@+id/guideline9"
-        http:layout_constraintEnd_toStartOf="@+id/guideline3"
-        http:layout_constraintStart_toStartOf="@+id/guideline"
-        http:layout_constraintTop_toTopOf="@+id/guideline2"
-        http:srcCompat="@drawable/warehouse_add" />
-
-    <ImageView
-        android:id="@+id/ivStockQuit"
-        android:layout_width="87dp"
-        android:layout_height="43dp"
+        android:id="@+id/ivStockEdit"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="@android:dimen/app_icon_size"
         http:layout_constraintBottom_toTopOf="@+id/guideline9"
         http:layout_constraintEnd_toStartOf="@+id/guideline4"
-        http:layout_constraintStart_toStartOf="@+id/guideline3"
+        http:layout_constraintStart_toStartOf="@+id/guideline"
         http:layout_constraintTop_toTopOf="@+id/guideline2"
-        http:srcCompat="@drawable/warehouse_remove" />
+        http:layout_constraintVertical_bias="0.411"
+        http:srcCompat="@drawable/stock_icon" />
 
     <ImageView
         android:id="@+id/ivRegistry"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="@android:dimen/app_icon_size"
         http:layout_constraintBottom_toTopOf="@+id/guideline9"
         http:layout_constraintEnd_toStartOf="@+id/guideline"
         http:layout_constraintStart_toStartOf="parent"
@@ -177,8 +161,8 @@
 
     <ImageView
         android:id="@+id/ivDelete"
-        android:layout_width="88dp"
-        android:layout_height="42dp"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="@android:dimen/app_icon_size"
         http:layout_constraintBottom_toTopOf="@+id/guideline9"
         http:layout_constraintEnd_toEndOf="parent"
         http:layout_constraintStart_toStartOf="@+id/guideline4"

@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -221,6 +222,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void sendDialogDataToActivity(String stock, String date, boolean notAddingStock, Cursor linia) {
+        Log.e("HOLAA", "Stock: " + stock + " | Date: " + date + " | Not adding stock? " + notAddingStock);
+
+        int stockUpdate = 0;
+
+        if (!notAddingStock) {
+            // AFEGIR STOCK
+            stockUpdate = linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) + Integer.parseInt(stock);
+        }
+        else {
+            // TREURE STOCK
+            stockUpdate = linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) - Integer.parseInt(stock);
+        }
+
+        bd.itemUpdate(
+                linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID)),
+                linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
+                linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_DESCRIPTION)),
+                linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_PVP)),
+                stockUpdate);
+
+        refreshItems();
+    }
+
 }
 
 class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter {
@@ -229,6 +254,7 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
 
     LayoutInflater mInflater;
 
+    private warehouseManagementDataSource bd;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
@@ -243,7 +269,7 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         final View view = super.getView(position, convertView, parent);
 
         // Agafem l'objecte de la view que es una LINEA DEL CURSOR
-        Cursor linia = (Cursor) getItem(position);
+        final Cursor linia = (Cursor) getItem(position);
 
         int stock = linia.getInt(
                 linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)
@@ -275,17 +301,17 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         });
 
         // Botó d'afegir stock
-        ImageView ivStockAdd = (ImageView) view.findViewById(R.id.ivStockAdd);
+        ImageView ivStockAdd = (ImageView) view.findViewById(R.id.ivStockEdit);
         ivStockAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showAlertDialogButtonClicked(view, "Afegir Stock");
+                showAlertDialogButtonClicked(view, "Modificar stock", linia);
             }
         });
 
         return view;
     }
 
-    public void showAlertDialogButtonClicked(View view, String title) {
+    public void showAlertDialogButtonClicked(View view, String title, final Cursor linia) {
         // create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
         builder.setTitle(title);
@@ -296,6 +322,8 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         // set the custom layout
         final View customLayout = mInflater.inflate(R.layout.dialog_stock, null);
         builder.setView(customLayout);
+
+        final String[] _Date = {""};
 
         ImageView ivDatePicker = (ImageView) customLayout.findViewById(R.id.ivDatePicker);
         ivDatePicker.setOnClickListener(new View.OnClickListener() {
@@ -326,6 +354,7 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
 
                 String date = day + "/" + month + "/" + year;
                 tvDatePicker.setText(date);
+                _Date[0] = date;
             }
         };
 
@@ -333,9 +362,14 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // send data from the AlertDialog to the Activity
+                boolean notAddingStock = false;
+                Switch switchStock = (Switch) customLayout.findViewById(R.id.switchStock);
+                if (switchStock.isChecked()) {
+                    notAddingStock = true;
+                }
+
                 EditText editText = customLayout.findViewById(R.id.edtNum);
-                sendDialogDataToActivity(editText.getText().toString());
+                mainActivity.sendDialogDataToActivity(editText.getText().toString(), _Date[0], notAddingStock, linia);
             }
         });
 
@@ -349,10 +383,5 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    // do something with the data coming from the AlertDialog
-    private void sendDialogDataToActivity(String data) {
-        Toast.makeText(mainActivity, data, Toast.LENGTH_SHORT).show();
     }
 }
