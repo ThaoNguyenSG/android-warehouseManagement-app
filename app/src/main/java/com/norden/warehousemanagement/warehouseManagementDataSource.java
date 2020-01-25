@@ -132,4 +132,28 @@ public class warehouseManagementDataSource {
                 null, null,
                 null, null, MOVEMENT_ID);
     }
+
+    public Cursor movement(long id) {
+        return dbR.query(table_MOVEMENT, new String[]{MOVEMENT_ID, MOVEMENT_ITEMCODE,MOVEMENT_DATE,MOVEMENT_QUANTITY,MOVEMENT_TYPE,MOVEMENT_WAREHOUSEMANAGEMENTID},
+                MOVEMENT_WAREHOUSEMANAGEMENTID+ "=?", new String[]{String.valueOf(id)},
+                null, null, MOVEMENT_ID);
+    }
+
+    public Cursor movementsBetweenDates(String initialDate, String finalDate, long id) {
+        return dbR.rawQuery("select * from " + table_MOVEMENT +
+                " where date BETWEEN '" + initialDate + "' AND '" + finalDate + "' AND warehouseManagementId = " + id + " " +
+                "ORDER BY date DESC ", null);
+    }
+
+    public Cursor movementsInitialDate(String initialDate, long id) {
+        return dbR.rawQuery("select * from " + table_MOVEMENT +
+                " where date >= '" + initialDate + "' AND warehouseManagementId = " + id + " " +
+                "ORDER BY date DESC ", null);
+    }
+
+    public Cursor movementsFinalDate(String finalDate, long id) {
+        return dbR.rawQuery("select * from " + table_MOVEMENT +
+                " where date <= '" + finalDate + "' AND warehouseManagementId = " + id + " " +
+                "ORDER BY date DESC ", null);
+    }
 }

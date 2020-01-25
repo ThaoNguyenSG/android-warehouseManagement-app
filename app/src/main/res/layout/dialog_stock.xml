@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="353dp"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,14 +25,16 @@
 
         <EditText
             android:id="@+id/edtNum"
-            android:layout_width="320dp"
+            android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
             android:ems="10"
-            android:fontFamily="sans-serif-smallcaps"
+            android:fontFamily="sans-serif"
             android:hint="Quantitat"
             android:inputType="number"
             app:layout_constraintBottom_toTopOf="@+id/guideline5"
             app:layout_constraintEnd_toStartOf="@+id/guideline11"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -53,23 +55,28 @@
             android:id="@+id/ivDatePicker"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="10dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline12"
             app:layout_constraintEnd_toStartOf="@+id/guideline11"
-            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline14"
             app:layout_constraintTop_toTopOf="@+id/guideline5"
+            app:layout_constraintVertical_bias="0.523"
             app:srcCompat="@drawable/calendar_icon" />
 
         <TextView
             android:id="@+id/tvDatePicker"
-            android:layout_width="247dp"
+            style="@style/Widget.AppCompat.TextView.SpinnerItem"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="center_vertical"
-            android:hint=" Sel·lecciona la data"
+            android:gravity="center"
+            android:hint="Sel·lecciona la data"
             android:textSize="18sp"
+            app:autoSizeTextType="none"
             app:layout_constraintBottom_toTopOf="@+id/guideline12"
-            app:layout_constraintEnd_toStartOf="@+id/guideline10"
+            app:layout_constraintEnd_toStartOf="@+id/guideline14"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/guideline5"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -113,7 +120,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline13"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/guideline12" />
 
         <TextView
@@ -127,6 +134,20 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline11"
             app:layout_constraintStart_toStartOf="@+id/guideline14"
             app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

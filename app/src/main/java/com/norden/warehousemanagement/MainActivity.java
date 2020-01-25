@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     private warehouseManagementDataSource bd;
     private adapterWarehouseManagementItems scItems;
+
+    LayoutInflater mInflater;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     private static String[] from = new String[]{warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE,
             warehouseManagementDataSource.WAREHOUSEMANAGEMENT_DESCRIPTION,
@@ -223,39 +225,117 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void sendDialogDataToActivity(String stock, String date, boolean notAddingStock, Cursor linia) {
-        //Log.e("@HOLAA", "Stock: " + stock + " | Date: " + date + " | Not adding stock? " + notAddingStock);
+    public void showAlertDialogButtonClicked(View view, String title, final int idLinia) {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+
+        Context context = this.getApplicationContext();
+        mInflater = LayoutInflater.from(context);
+
+        // set the custom layout
+        final View customLayout = mInflater.inflate(R.layout.dialog_stock, null);
+        builder.setView(customLayout);
+
+        final String[] _Date = {""};
+
+        ImageView ivDatePicker = (ImageView) customLayout.findViewById(R.id.ivDatePicker);
+        ivDatePicker.setImageResource(R.drawable.calendar_icon);
+        ivDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        MainActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year,month,day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        final TextView tvDatePicker = (TextView) customLayout.findViewById(R.id.tvDatePicker);
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
+
+                String date = year + "/" + month + "/" + day;
+                tvDatePicker.setText(date);
+                _Date[0] = date;
+            }
+        };
+
+        // add a button
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean notAddingStock = false;
+                Switch switchStock = (Switch) customLayout.findViewById(R.id.switchStock);
+                if (switchStock.isChecked()) {
+                    notAddingStock = true;
+                }
+
+                EditText editText = customLayout.findViewById(R.id.edtNum);
+                sendDialogDataToActivity(editText.getText().toString(), _Date[0], notAddingStock, idLinia);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void sendDialogDataToActivity(String stock, String date, boolean notAddingStock, int idLinia) {
+        /*Log.e("@HOLAA", "Stock: " + stock + " | Date: " + date + " | Not adding stock? " + notAddingStock);*/
+
+        Cursor item = bd.item(idLinia);
+        item.moveToFirst();
 
         int stockUpdate;
 
         if (!notAddingStock) {
             // AFEGIR STOCK
             bd.movementAdd(
-                    linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
+                    item.getString(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
                     date,
                     Integer.parseInt(stock),
                     "Entrada",
-                    linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
+                    item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
             );
-            stockUpdate = linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) + Integer.parseInt(stock);
+            stockUpdate = item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) + Integer.parseInt(stock);
         }
         else {
             // TREURE STOCK
             bd.movementAdd(
-                    linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
+                    item.getString(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
                     date,
                     -Integer.parseInt(stock),
                     "Sortida",
-                    linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
+                    item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
             );
-            stockUpdate = linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) - Integer.parseInt(stock);
+            stockUpdate = item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)) - Integer.parseInt(stock);
         }
 
         bd.itemUpdate(
-                linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID)),
-                linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
-                linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_DESCRIPTION)),
-                linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_PVP)),
+                item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID)),
+                item.getString(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
+                item.getString(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_DESCRIPTION)),
+                item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_PVP)),
                 stockUpdate);
 
         /*Cursor movements = bd.movements();
@@ -272,10 +352,6 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
 
     public MainActivity mainActivity;
 
-    LayoutInflater mInflater;
-
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
-
     public adapterWarehouseManagementItems(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
         super(context, layout, c, from, to, flags);
         mainActivity = (MainActivity) context;
@@ -288,6 +364,8 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
 
         // Agafem l'objecte de la view que es una LINEA DEL CURSOR
         final Cursor linia = (Cursor) getItem(position);
+
+        final int idLinia = linia.getInt(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID));
 
         int stock = linia.getInt(
                 linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)
@@ -319,87 +397,33 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
         });
 
         // Botó d'afegir stock
-        ImageView ivStockAdd = (ImageView) view.findViewById(R.id.ivStockEdit);
-        ivStockAdd.setOnClickListener(new View.OnClickListener() {
+        ImageView ivStockEdit = (ImageView) view.findViewById(R.id.ivStockEdit);
+        ivStockEdit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showAlertDialogButtonClicked(view, "Modificar stock", linia);
+                mainActivity.showAlertDialogButtonClicked(view, "Modificar stock", idLinia);
+            }
+        });
+
+        ImageView ivRegistry = (ImageView) view.findViewById(R.id.ivRegistry);
+        ivRegistry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View row = (View) v.getParent();
+                // Busco el ListView
+                ListView lv = (ListView) row.getParent();
+                // Busco quina posicio ocupa la Row dins de la ListView
+                int position = lv.getPositionForView(row);
+
+                // Carrego la linia del cursor de la posició.
+                Cursor linia = (Cursor) getItem(position);
+
+                Intent myIntent = new Intent(mainActivity, itemRegistryActivity.class);
+                myIntent.putExtra("id_article", linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID)));
+                myIntent.putExtra("codi_article", linia.getString(linia.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)));
+                mainActivity.startActivity(myIntent);
             }
         });
 
         return view;
-    }
-
-    public void showAlertDialogButtonClicked(View view, String title, final Cursor linia) {
-        // create an alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
-        builder.setTitle(title);
-
-        Context context = mainActivity.getApplicationContext();
-        mInflater = LayoutInflater.from(context);
-
-        // set the custom layout
-        final View customLayout = mInflater.inflate(R.layout.dialog_stock, null);
-        builder.setView(customLayout);
-
-        final String[] _Date = {""};
-
-        ImageView ivDatePicker = (ImageView) customLayout.findViewById(R.id.ivDatePicker);
-        ivDatePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dialog = new DatePickerDialog(
-                        mainActivity,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mDateSetListener,
-                        year,month,day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-
-        final TextView tvDatePicker = (TextView) customLayout.findViewById(R.id.tvDatePicker);
-
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
-                Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
-
-                String date = day + "/" + month + "/" + year;
-                tvDatePicker.setText(date);
-                _Date[0] = date;
-            }
-        };
-
-        // add a button
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                boolean notAddingStock = false;
-                Switch switchStock = (Switch) customLayout.findViewById(R.id.switchStock);
-                if (switchStock.isChecked()) {
-                    notAddingStock = true;
-                }
-
-                EditText editText = customLayout.findViewById(R.id.edtNum);
-                mainActivity.sendDialogDataToActivity(editText.getText().toString(), _Date[0], notAddingStock, linia);
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
-        });
-
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 }
