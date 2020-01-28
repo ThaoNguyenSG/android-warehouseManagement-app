@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -225,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void showAlertDialogButtonClicked(View view, String title, final int idLinia) {
+    public void showAlertDialogButtonClicked(View view, String title, final int idLinia, final boolean addingStock) {
         // create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
@@ -277,14 +276,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                boolean notAddingStock = false;
-                Switch switchStock = (Switch) customLayout.findViewById(R.id.switchStock);
-                if (switchStock.isChecked()) {
-                    notAddingStock = true;
-                }
-
                 EditText editText = customLayout.findViewById(R.id.edtNum);
-                sendDialogDataToActivity(editText.getText().toString(), _Date[0], notAddingStock, idLinia);
+                sendDialogDataToActivity(editText.getText().toString(), _Date[0], addingStock, idLinia);
             }
         });
 
@@ -300,15 +293,13 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void sendDialogDataToActivity(String stock, String date, boolean notAddingStock, int idLinia) {
-        /*Log.e("@HOLAA", "Stock: " + stock + " | Date: " + date + " | Not adding stock? " + notAddingStock);*/
-
+    public void sendDialogDataToActivity(String stock, String date, boolean addingStock, int idLinia) {
         Cursor item = bd.item(idLinia);
         item.moveToFirst();
 
         int stockUpdate;
 
-        if (!notAddingStock) {
+        if (addingStock) {
             // AFEGIR STOCK
             bd.movementAdd(
                     item.getString(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
@@ -396,11 +387,19 @@ class adapterWarehouseManagementItems extends android.widget.SimpleCursorAdapter
             }
         });
 
-        // Botó d'afegir stock
-        ImageView ivStockEdit = (ImageView) view.findViewById(R.id.ivStockEdit);
-        ivStockEdit.setOnClickListener(new View.OnClickListener() {
+        // Botó de treure stock
+        ImageView ivStockQuit = (ImageView) view.findViewById(R.id.ivStockQuit);
+        ivStockQuit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mainActivity.showAlertDialogButtonClicked(view, "Modificar stock", idLinia);
+                mainActivity.showAlertDialogButtonClicked(view, "Treure stock", idLinia, false);
+            }
+        });
+
+        // Botó d'afegir stock
+        ImageView ivStockAdd = (ImageView) view.findViewById(R.id.ivStockAdd);
+        ivStockAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mainActivity.showAlertDialogButtonClicked(view, "Afegir stock", idLinia, true);
             }
         });
 
