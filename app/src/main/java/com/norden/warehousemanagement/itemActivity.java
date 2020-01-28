@@ -149,8 +149,7 @@ public class itemActivity extends AppCompatActivity {
 
         // Mirem si estem creant o estem guardant
         if (idItem == -1) {
-            Cursor c = bd.itemCode(tv.getText().toString());
-            if (c.getCount() > 0) {
+            if (bd.itemCodeExists(tv.getText().toString())) {
                 myDialogs.showShortToast(this, "Ja existeix un article amb aquest codi");
                 return;
             }

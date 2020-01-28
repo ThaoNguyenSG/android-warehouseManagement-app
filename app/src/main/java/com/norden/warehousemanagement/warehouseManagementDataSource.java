@@ -71,6 +71,14 @@ public class warehouseManagementDataSource {
 
     }
 
+    public boolean itemCodeExists(String itemCode) {
+        Cursor _cursor = dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
+                WAREHOUSEMANAGEMENT_ITEMCODE+ "=?", new String[]{String.valueOf(itemCode)},
+                null, null, null);
+
+        return _cursor.moveToFirst();
+    }
+
     // Retorna els articles que SI tenen stock
     public Cursor stockIems() {
         return dbR.query(table_WAREHOUSEMANAGEMENT, new String[]{WAREHOUSEMANAGEMENT_ID,WAREHOUSEMANAGEMENT_ITEMCODE,WAREHOUSEMANAGEMENT_DESCRIPTION,WAREHOUSEMANAGEMENT_PVP,WAREHOUSEMANAGEMENT_STOCK},
@@ -99,7 +107,7 @@ public class warehouseManagementDataSource {
     }
 
     // Modifiquem els valors de l'article amb clau primària "id"
-    public void itemUpdate(long id, String itemCode, String description, double pvp, int stock) {
+    public void itemUpdate(long id, String itemCode, String description, double pvp, long stock) {
         ContentValues values = new ContentValues();
         values.put(WAREHOUSEMANAGEMENT_ITEMCODE, itemCode);
         values.put(WAREHOUSEMANAGEMENT_DESCRIPTION, description);
@@ -116,7 +124,7 @@ public class warehouseManagementDataSource {
 
     // TAULA MOVEMENT ------------------------------- :D
 
-    public long movementAdd(String itemCode, String date, int quantity, String type, int warehouseManagementId) {
+    public long movementAdd(String itemCode, String date, long quantity, String type, int warehouseManagementId) {
         ContentValues values = new ContentValues();
         values.put(MOVEMENT_ITEMCODE, itemCode);
         values.put(MOVEMENT_DATE, date);

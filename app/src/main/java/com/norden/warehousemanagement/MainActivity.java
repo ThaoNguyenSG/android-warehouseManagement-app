@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -229,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
 
-        Context context = this.getApplicationContext();
+        final Context context = this.getApplicationContext();
         mInflater = LayoutInflater.from(context);
 
         // set the custom layout
@@ -237,6 +238,25 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(customLayout);
 
         final String[] _Date = {""};
+
+        final TextView tvDatePicker = (TextView) customLayout.findViewById(R.id.tvDatePicker);
+        tvDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        MainActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year,month,day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
 
         ImageView ivDatePicker = (ImageView) customLayout.findViewById(R.id.ivDatePicker);
         ivDatePicker.setImageResource(R.drawable.calendar_icon);
@@ -258,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final TextView tvDatePicker = (TextView) customLayout.findViewById(R.id.tvDatePicker);
+        //final TextView tvDatePicker = (TextView) customLayout.findViewById(R.id.tvDatePicker);
 
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -267,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
 
                 String date = year + "/" + month + "/" + day;
+                //String dateEs = year + "/" + month + "/" + day;
                 tvDatePicker.setText(date);
                 _Date[0] = date;
             }
@@ -276,8 +297,14 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 EditText editText = customLayout.findViewById(R.id.edtNum);
-                sendDialogDataToActivity(editText.getText().toString(), _Date[0], addingStock, idLinia);
+                if (editText.getText().toString().length() > 5) {
+                    myDialogs.showShortToast(context, "El número es massa llarg!");
+                }
+                else {
+                    sendDialogDataToActivity(editText.getText().toString(), _Date[0], addingStock, idLinia);
+                }
             }
         });
 

@@ -53,7 +53,6 @@
             android:gravity="center"
             android:hint="Sel·lecciona la data"
             android:textSize="18sp"
-            app:autoSizeTextType="none"
             app:layout_constraintBottom_toTopOf="@+id/guideline12"
             app:layout_constraintEnd_toStartOf="@+id/guideline14"
             app:layout_constraintHorizontal_bias="1.0"

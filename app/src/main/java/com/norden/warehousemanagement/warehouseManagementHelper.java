@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class warehouseManagementHelper extends SQLiteOpenHelper {
 
     // database version
-    private static final int database_VERSION = 1;
+    private static final int database_VERSION = 2;
 
     // database name
     private static final String database_NAME = "warehouseManagementDataBase";
