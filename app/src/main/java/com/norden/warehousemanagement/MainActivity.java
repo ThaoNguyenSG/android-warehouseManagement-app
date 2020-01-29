@@ -287,8 +287,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
 
                 String date = year + "/" + month + "/" + day;
-                //String dateEs = year + "/" + month + "/" + day;
-                tvDatePicker.setText(date);
+                String dateEs = day + "/" + month + "/" + year;
+                tvDatePicker.setText(dateEs);
                 _Date[0] = date;
             }
         };

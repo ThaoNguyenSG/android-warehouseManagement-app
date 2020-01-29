@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
@@ -42,7 +44,7 @@ public class itemRegistryActivity extends AppCompatActivity {
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-   private static String[] from = new String[]{warehouseManagementDataSource.MOVEMENT_DATE,
+    private static String[] from = new String[]{warehouseManagementDataSource.MOVEMENT_DATE,
             warehouseManagementDataSource.MOVEMENT_QUANTITY,
             warehouseManagementDataSource.MOVEMENT_TYPE};
     private static int[] to = new int[]{R.id.tvDate_R2, R.id.tvQuantity_R2, R.id.tvType_R2};
@@ -85,7 +87,11 @@ public class itemRegistryActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadMovementsDates();
+                try {
+                    loadMovementsDates();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -102,17 +108,17 @@ public class itemRegistryActivity extends AppCompatActivity {
         lv.setAdapter(scMovements);
     }
 
-    public void loadMovementsDates() {
+    public void loadMovementsDates() throws ParseException {
         Cursor _cursor;
 
         if(!edtInitialDate.getText().toString().isEmpty() && !edtFinalDate.getText().toString().isEmpty()){
-            _cursor = bd.movementsBetweenDates(edtInitialDate.getText().toString(), edtFinalDate.getText().toString(),Integer.parseInt(id_article));
+            _cursor = bd.movementsBetweenDates(dateFormatChanger.ChangeFormatDate(edtInitialDate.getText().toString(), "dd/MM/yyyy","yyyy/MM/dd"), edtFinalDate.getText().toString(),Integer.parseInt(id_article));
         }
         else if(!edtInitialDate.getText().toString().isEmpty()){
-            _cursor = bd.movementsInitialDate(edtInitialDate.getText().toString(),Integer.parseInt(id_article));
+            _cursor = bd.movementsInitialDate(dateFormatChanger.ChangeFormatDate(edtInitialDate.getText().toString(), "dd/MM/yyyy","yyyy/MM/dd"),Integer.parseInt(id_article));
         }
         else if(!edtFinalDate.getText().toString().isEmpty()){
-            _cursor = bd.movementsFinalDate(edtFinalDate.getText().toString(),Integer.parseInt(id_article));
+            _cursor = bd.movementsFinalDate(dateFormatChanger.ChangeFormatDate(edtFinalDate.getText().toString(), "dd/MM/yyyy","yyyy/MM/dd"),Integer.parseInt(id_article));
         }
         else {
             _cursor = bd.movement(Integer.parseInt(id_article));
@@ -137,7 +143,7 @@ public class itemRegistryActivity extends AppCompatActivity {
                 month = month + 1;
                 Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
 
-                String date = year + "/" + month + "/" + day;
+                String date = day + "/" + month + "/" + year;
                 editText.setText(date);
             }
         };
@@ -165,4 +171,21 @@ class adapterWarehouseManagementItemsRegistry extends android.widget.SimpleCurso
         super(context, layout, c, from, to, flags);
     }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        final View view = super.getView(position, convertView, parent);
+
+        // Agafem l'objecte de la view que es una LINEA DEL CURSOR
+        final Cursor linia = (Cursor) getItem(position);
+
+        TextView tv = view.findViewById(R.id.tvDate_R2);
+        try {
+            tv.setText(dateFormatChanger.ChangeFormatDate(tv.getText().toString(), "yyyy/MM/dd", "dd/MM/yyyy"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return view;
+    }
 }
