@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/allMovements"
+        android:icon="@drawable/ic_history_black_24dp"
+        android:title="allMovements"
+        app:showAsAction="always|withText">
+    </item>
+    <item
         android:id="@+id/allItems"
         app:showAsAction="never"
         android:title="Tots els articles">

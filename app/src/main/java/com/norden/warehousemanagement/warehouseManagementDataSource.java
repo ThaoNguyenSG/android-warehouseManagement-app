@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class warehouseManagementDataSource {
 
@@ -163,5 +164,11 @@ public class warehouseManagementDataSource {
         return dbR.rawQuery("select * from " + table_MOVEMENT +
                 " where date <= '" + finalDate + "' AND warehouseManagementId = " + id + " " +
                 "ORDER BY date DESC ", null);
+    }
+
+    public Cursor movementsEqualDate(String date2) {
+        return dbR.query(table_MOVEMENT, new String[]{MOVEMENT_ID, MOVEMENT_ITEMCODE,MOVEMENT_DATE,MOVEMENT_QUANTITY,MOVEMENT_TYPE,MOVEMENT_WAREHOUSEMANAGEMENTID},
+                MOVEMENT_DATE + "=" + date2, null,
+                null, null, MOVEMENT_ITEMCODE);
     }
 }

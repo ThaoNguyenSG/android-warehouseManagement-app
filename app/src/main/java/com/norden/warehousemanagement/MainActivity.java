@@ -151,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.allMovements:
+                showAllMovementsActivity();
+                return true;
             case R.id.allItems:
                 loadItems();
                 return true;
@@ -362,6 +365,12 @@ public class MainActivity extends AppCompatActivity {
         Log.e("@MOVEMENTS", DatabaseUtils.dumpCursorToString(movements));*/
 
         refreshItems();
+    }
+
+    public void showAllMovementsActivity() {
+        Intent myIntent = new Intent(this, allMovementsActivity.class);
+        //myIntent.putExtra("id_article", "...");
+        this.startActivity(myIntent);
     }
 
 }
