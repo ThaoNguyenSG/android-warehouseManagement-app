@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class warehouseManagementDataSource {
 
@@ -137,9 +136,12 @@ public class warehouseManagementDataSource {
     }
 
     public Cursor movements() {
-        return dbR.query(table_MOVEMENT, new String[]{MOVEMENT_ID, MOVEMENT_ITEMCODE,MOVEMENT_DATE,MOVEMENT_QUANTITY,MOVEMENT_TYPE,MOVEMENT_WAREHOUSEMANAGEMENTID},
-                null, null,
-                null, null, MOVEMENT_ID);
+        Cursor _cursor = dbR.rawQuery("SELECT * FROM " + table_MOVEMENT
+                + " INNER JOIN " + table_WAREHOUSEMANAGEMENT
+                + " ON " + table_MOVEMENT + "." + MOVEMENT_WAREHOUSEMANAGEMENTID + "=" + table_WAREHOUSEMANAGEMENT + "." + WAREHOUSEMANAGEMENT_ID
+                + " ORDER BY " + table_MOVEMENT + "." + MOVEMENT_ITEMCODE + " ASC",null);
+
+        return _cursor;
     }
 
     public Cursor movement(long id) {
@@ -149,26 +151,32 @@ public class warehouseManagementDataSource {
     }
 
     public Cursor movementsBetweenDates(String initialDate, String finalDate, long id) {
-        return dbR.rawQuery("select * from " + table_MOVEMENT +
+        Cursor _cursor =  dbR.rawQuery("select * from " + table_MOVEMENT +
                 " where date BETWEEN '" + initialDate + "' AND '" + finalDate + "' AND warehouseManagementId = " + id + " " +
                 "ORDER BY date DESC ", null);
+
+        return _cursor;
     }
 
     public Cursor movementsInitialDate(String initialDate, long id) {
         return dbR.rawQuery("select * from " + table_MOVEMENT +
                 " where date >= '" + initialDate + "' AND warehouseManagementId = " + id + " " +
-                "ORDER BY date DESC ", null);
+                "ORDER BY date ASC ", null);
     }
 
     public Cursor movementsFinalDate(String finalDate, long id) {
         return dbR.rawQuery("select * from " + table_MOVEMENT +
                 " where date <= '" + finalDate + "' AND warehouseManagementId = " + id + " " +
-                "ORDER BY date DESC ", null);
+                "ORDER BY date ASC ", null);
     }
 
-    public Cursor movementsEqualDate(String date2) {
-        return dbR.query(table_MOVEMENT, new String[]{MOVEMENT_ID, MOVEMENT_ITEMCODE,MOVEMENT_DATE,MOVEMENT_QUANTITY,MOVEMENT_TYPE,MOVEMENT_WAREHOUSEMANAGEMENTID},
-                MOVEMENT_DATE + "=" + date2, null,
-                null, null, MOVEMENT_ITEMCODE);
+    public Cursor movementsEqualDate(String date) {
+        String MY_QUERY = "SELECT * FROM " + table_MOVEMENT + " INNER JOIN " + table_WAREHOUSEMANAGEMENT +
+                " ON " + table_MOVEMENT + "." + MOVEMENT_WAREHOUSEMANAGEMENTID + "=" + table_WAREHOUSEMANAGEMENT + "." + WAREHOUSEMANAGEMENT_ID +
+                " WHERE " + table_MOVEMENT + "." + MOVEMENT_DATE + "=?";
+
+        Cursor _cursor = dbR.rawQuery(MY_QUERY, new String[]{String.valueOf(date)});
+
+        return _cursor;
     }
 }

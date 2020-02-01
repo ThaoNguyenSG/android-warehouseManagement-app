@@ -28,8 +28,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:ems="10"
             android:fontFamily="sans-serif"
             android:hint="Quantitat"
             android:inputType="number"
@@ -45,12 +43,12 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95" />
 
-        <TextView
+        <EditText
             android:id="@+id/tvDatePicker"
-            style="@style/Widget.AppCompat.TextView.SpinnerItem"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:focusable="false"
             android:hint="Sel·lecciona la data"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline12"
@@ -72,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.6" />
+            app:layout_constraintGuide_percent="0.74" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"
@@ -85,7 +83,7 @@
             android:id="@+id/ivDatePicker"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
+            android:layout_margin="0dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline12"
             app:layout_constraintEnd_toStartOf="@+id/guideline11"
             app:layout_constraintStart_toStartOf="@+id/guideline14"

@@ -20,14 +20,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
@@ -37,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private static int ACTIVITY_ITEM_ADD = 1;
     private static int ACTIVITY_ITEM_UPDATE = 2;
 
-    private int iStock = 100000000;
     private long idActual;
+    private int firstTimeApp = 0;
 
     private warehouseManagementDataSource bd;
     private adapterWarehouseManagementItems scItems;
@@ -91,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.listView);
 
         lv.setAdapter(scItems);
+
+        if (scItems.isEmpty() && firstTimeApp != 0) {
+            myDialogs.showShortToast(this, "No s'ha trobat cap article");
+        }
+
+        firstTimeApp++;
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -178,6 +183,10 @@ public class MainActivity extends AppCompatActivity {
 
         lv.setAdapter(scItems);
 
+        if (scItems.isEmpty()) {
+            myDialogs.showShortToast(this, "No s'ha trobat cap article en stock");
+        }
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -196,6 +205,10 @@ public class MainActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.listView);
 
         lv.setAdapter(scItems);
+
+        if (scItems.isEmpty()) {
+            myDialogs.showShortToast(this, "No s'ha trobat cap article sense stock");
+        }
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -289,9 +302,18 @@ public class MainActivity extends AppCompatActivity {
                 month = month + 1;
                 Log.d(TAG, "onDateSet: yyyy/mm/dd: " + year + "/" + month + "/" + day);
 
-                String date = year + "/" + month + "/" + day;
-                String dateEs = day + "/" + month + "/" + year;
-                tvDatePicker.setText(dateEs);
+                String sDay = String.valueOf(day);
+                String sMonth = String.valueOf(month);
+
+                if (sDay.length() != 2) {
+                    sDay = "0" + sDay;
+                }
+                if (sMonth.length() != 2) {
+                    sMonth = "0" + sMonth;
+                }
+
+                String date = sDay + "/" + sMonth + "/" + year;
+                tvDatePicker.setText(date);
                 _Date[0] = date;
             }
         };
@@ -306,7 +328,11 @@ public class MainActivity extends AppCompatActivity {
                     myDialogs.showShortToast(context, "El número es massa llarg!");
                 }
                 else {
-                    sendDialogDataToActivity(editText.getText().toString(), _Date[0], addingStock, idLinia);
+                    try {
+                        sendDialogDataToActivity(editText.getText().toString(), _Date[0], addingStock, idLinia);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -323,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void sendDialogDataToActivity(String stock, String date, boolean addingStock, int idLinia) {
+    public void sendDialogDataToActivity(String stock, String date, boolean addingStock, int idLinia) throws ParseException {
         Cursor item = bd.item(idLinia);
         item.moveToFirst();
 
@@ -333,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             // AFEGIR STOCK
             bd.movementAdd(
                     item.getString(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
-                    date,
+                    dateFormatChanger.ChangeFormatDate(date, "dd/MM/yyyy","yyyy/MM/dd"),
                     Integer.parseInt(stock),
                     "Entrada",
                     item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
@@ -344,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
             // TREURE STOCK
             bd.movementAdd(
                     item.getString(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ITEMCODE)),
-                    date,
+                    dateFormatChanger.ChangeFormatDate(date, "dd/MM/yyyy","yyyy/MM/dd"),
                     -Integer.parseInt(stock),
                     "Sortida",
                     item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_ID))
@@ -359,17 +385,18 @@ public class MainActivity extends AppCompatActivity {
                 item.getInt(item.getColumnIndexOrThrow(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_PVP)),
                 stockUpdate);
 
-        /*Cursor movements = bd.movements();
-        movements.moveToFirst();
-
-        Log.e("@MOVEMENTS", DatabaseUtils.dumpCursorToString(movements));*/
+        if (addingStock) {
+            myDialogs.showShortToast(this, "S'ha afegit " + stock + " de stock");
+        }
+        else {
+            myDialogs.showShortToast(this, "S'ha tret " + stock + " de stock");
+        }
 
         refreshItems();
     }
 
     public void showAllMovementsActivity() {
         Intent myIntent = new Intent(this, allMovementsActivity.class);
-        //myIntent.putExtra("id_article", "...");
         this.startActivity(myIntent);
     }
 

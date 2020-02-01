@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
+import static android.util.TypedValue.TYPE_NULL;
 
 public class allMovementsActivity extends AppCompatActivity {
 
@@ -49,6 +50,13 @@ public class allMovementsActivity extends AppCompatActivity {
         loadMovements();
 
         edtDate = (EditText) findViewById(R.id.edtDate);
+        edtDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAndGetDateCalendar(edtDate);
+            }
+        });
+
         ImageView ivDate = (ImageView) findViewById(R.id.ivDate);
         ivDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +103,6 @@ public class allMovementsActivity extends AppCompatActivity {
         Cursor _cursor;
 
         if(!edtDate.getText().toString().isEmpty()){
-            Log.d("HOLAAAAA", dateFormatChanger.ChangeFormatDate(edtDate.getText().toString(), "dd/MM/yyyy","yyyy/MM/dd"));
             _cursor = bd.movementsEqualDate(dateFormatChanger.ChangeFormatDate(edtDate.getText().toString(), "dd/MM/yyyy","yyyy/MM/dd"));
         }
         else {
@@ -107,6 +114,10 @@ public class allMovementsActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.lvAllMovements);
 
         lv.setAdapter(scMovements);
+
+        if (scMovements.isEmpty()) {
+            myDialogs.showShortToast(this, "No s'ha trobat cap moviment");
+        }
     }
 
     public void showAndGetDateCalendar(final EditText editText) {
@@ -166,12 +177,12 @@ class adapterAllMovementsActivity extends android.widget.SimpleCursorAdapter {
         // Agafem l'objecte de la view que es una LINEA DEL CURSOR
         final Cursor linia = (Cursor) getItem(position);
 
-        /*TextView tv = view.findViewById(R.id.edtDate);
+        TextView tv = view.findViewById(R.id.tvDate_R2);
         try {
             tv.setText(dateFormatChanger.ChangeFormatDate(tv.getText().toString(), "yyyy/MM/dd", "dd/MM/yyyy"));
         } catch (ParseException e) {
             e.printStackTrace();
-        }*/
+        }
 
         return view;
     }

@@ -65,13 +65,27 @@ public class itemRegistryActivity extends AppCompatActivity {
         loadMovements(Integer.parseInt(id_article));
 
         edtInitialDate = (EditText) findViewById(R.id.edtInitialDate);
-        edtFinalDate = (EditText) findViewById(R.id.edtFinalDate);
+        edtInitialDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAndGetDateCalendar(edtInitialDate);
+            }
+        });
 
         ivInitialDate = (ImageView) findViewById(R.id.ivInitialDate);
         ivInitialDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAndGetDateCalendar(edtInitialDate);
+            }
+        });
+
+
+        edtFinalDate = (EditText) findViewById(R.id.edtFinalDate);
+        edtFinalDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAndGetDateCalendar(edtFinalDate);
             }
         });
 
@@ -134,15 +148,15 @@ public class itemRegistryActivity extends AppCompatActivity {
             _cursor = bd.movement(Integer.parseInt(id_article));
         }
 
-        /*if (_cursor.getColumnCount() < 1) {
-            myDialogs.showShortToast(this, "No s'ha trobat cap moviment");
-        }*/
-
         scMovements = new adapterWarehouseManagementItemsRegistry(this, R.layout.registry_item, _cursor, from, to, 1);
 
         ListView lv = (ListView) findViewById(R.id.lvMovements);
 
         lv.setAdapter(scMovements);
+
+        if (scMovements.isEmpty()) {
+            myDialogs.showShortToast(this, "No s'ha trobat cap moviment");
+        }
     }
 
     public void showAndGetDateCalendar(final EditText editText) {

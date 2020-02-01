@@ -1,5 +1,7 @@
 package com.norden.warehousemanagement;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -7,10 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class itemActivity extends AppCompatActivity {
 
@@ -33,8 +32,6 @@ public class itemActivity extends AppCompatActivity {
             setTitle("Afegir nou article");
         }
 
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bd = new warehouseManagementDataSource(this);
@@ -87,6 +84,7 @@ public class itemActivity extends AppCompatActivity {
         tv.setText(datos.getString(datos.getColumnIndex(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_PVP)));
 
         tv = (TextView) findViewById(R.id.edtStock);
+        tv.setEnabled(false);
         tv.setText(datos.getString(datos.getColumnIndex(warehouseManagementDataSource.WAREHOUSEMANAGEMENT_STOCK)));
     }
 
@@ -200,3 +198,4 @@ public class itemActivity extends AppCompatActivity {
     }
 
 }
+
