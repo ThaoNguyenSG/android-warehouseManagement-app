@@ -168,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.noStockItems:
                 loadNoStockItems();
                 return true;
+            case R.id.weatherIcon:
+                showWeatherActivity();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -397,6 +400,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void showAllMovementsActivity() {
         Intent myIntent = new Intent(this, allMovementsActivity.class);
+        this.startActivity(myIntent);
+    }
+
+    public void showWeatherActivity() {
+        Intent myIntent = new Intent(this, weatherActivity.class);
         this.startActivity(myIntent);
     }
 

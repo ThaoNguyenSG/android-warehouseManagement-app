@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".itemActivity"></activity>
+        <activity android:name=".weatherActivity"></activity>
+        <activity android:name=".itemActivity" />
         <activity android:name=".allMovementsActivity" />
         <activity android:name=".itemRegistryActivity" />
         <activity android:name=".MainActivity">
