@@ -1,0 +1,63 @@
+package com.norden.warehousemanagement;
+
+public class cityWeather {
+    public double Temperature;
+    public double MaxTemp;
+    public double MinTemp;
+    public double RealFeelTemp;
+    public String Description;
+
+    public cityWeather(double temperature, double maxTemp, double minTemp, double realFeelTemp, String description) {
+        Temperature = temperature - 273.15;
+        MaxTemp = maxTemp - 273.15;
+        MinTemp = minTemp - 273.15;
+        RealFeelTemp = realFeelTemp - 273.15;
+        Description = description;
+    }
+
+    public double getTemperature() {
+        return Temperature;
+    }
+    public void setTemperature(int temperature) {
+        Temperature = temperature;
+    }
+
+    public double getMaxTemp() {
+        return MaxTemp;
+    }
+    public void setMaxTemp(int maxTemp) {
+        MaxTemp = maxTemp;
+    }
+
+    public double getMinTemp() {
+        return MinTemp;
+    }
+    public void setMinTemp(int minTemp) {
+        MinTemp = minTemp;
+    }
+
+    public double getRealFeelTemp() {
+        return RealFeelTemp;
+    }
+    public void setRealFeelTemp(int realFeelTemp) {
+        RealFeelTemp = realFeelTemp;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "cityWeather{" +
+                "Temperature=" + Temperature +
+                ", MaxTemp=" + MaxTemp +
+                ", MinTemp=" + MinTemp +
+                ", RealFeelTemp=" + RealFeelTemp +
+                ", Description='" + Description + '\'' +
+                '}';
+    }
+}
