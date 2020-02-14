@@ -1,10 +1,12 @@
 package com.norden.warehousemanagement;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -29,6 +31,7 @@ public class weatherActivity extends AppCompatActivity {
 
     Button btnSearchWeather;
     EditText edtCityWeather;
+    ConstraintLayout constraintLayout;
     TextView tvTempCelsius, tvMaxTemp, tvMinTemp, tvRealFeel, tvDescription;
     TextView tvMaxTemp_D, tvMinTemp_D, tvRealFeel_D;
     ImageView ivWeather;
@@ -42,6 +45,8 @@ public class weatherActivity extends AppCompatActivity {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        constraintLayout = findViewById(R.id.constraintLayout);
 
         edtCityWeather = findViewById(R.id.edtCityWeather);
         tvTempCelsius = findViewById(R.id.tvTempCelsius);
@@ -122,6 +127,8 @@ public class weatherActivity extends AppCompatActivity {
                 }
 
                 revealTextViews();
+
+                constraintLayout.setBackground(getDrawable(R.drawable.weather));
 
                 Dialog.hide();
             }
