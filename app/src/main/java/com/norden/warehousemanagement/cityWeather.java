@@ -6,13 +6,15 @@ public class cityWeather {
     public double MinTemp;
     public double RealFeelTemp;
     public String Description;
+    public String WeatherIcon;
 
-    public cityWeather(double temperature, double maxTemp, double minTemp, double realFeelTemp, String description) {
+    public cityWeather(double temperature, double maxTemp, double minTemp, double realFeelTemp, String description, String weatherIcon) {
         Temperature = temperature - 273.15;
         MaxTemp = maxTemp - 273.15;
         MinTemp = minTemp - 273.15;
         RealFeelTemp = realFeelTemp - 273.15;
         Description = description;
+        WeatherIcon = weatherIcon;
     }
 
     public double getTemperature() {
@@ -48,6 +50,13 @@ public class cityWeather {
     }
     public void setDescription(String description) {
         Description = description;
+    }
+
+    public String getWeatherIcon() {
+        return WeatherIcon;
+    }
+    public void setWeatherIcon(String weatherIcon) {
+        WeatherIcon = weatherIcon;
     }
 
     @Override
