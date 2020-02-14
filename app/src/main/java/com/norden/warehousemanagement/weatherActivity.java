@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,6 +22,7 @@ import cz.msebera.android.httpclient.Header;
 public class weatherActivity extends AppCompatActivity {
 
     Button btnSearchWeather;
+    EditText edtCityWeather;
     TextView tvTempCelsius, tvMaxTemp, tvMinTemp, tvRealFeel, tvDescription;
 
     @Override
@@ -31,6 +33,9 @@ public class weatherActivity extends AppCompatActivity {
         setTitle("Temps actual");
 
         //hideTextViews();
+
+        edtCityWeather = findViewById(R.id.edtCityWeather);
+        tvTempCelsius = findViewById(R.id.tvTempCelsius);
 
         btnSearchWeather = (Button) findViewById(R.id.btnSearchWeather);
         btnSearchWeather.setOnClickListener(new View.OnClickListener() {
@@ -49,8 +54,8 @@ public class weatherActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         client.setMaxRetriesAndTimeout(0,10000);
 
-        String City = "";
-        String Url = "https://samples.openweathermap.org/data/2.5/weather?q=" + City + "&appid=b6907d289e10d714a6e88b30761fae22";
+        String City = edtCityWeather.getText().toString();
+        String Url = "http://api.openweathermap.org/data/2.5/weather?q=" + City + "&APPID=c56998ed0c8e889a77a182e7b74eade4";
 
         client.get(this, Url, new AsyncHttpResponseHandler() {
 
@@ -78,35 +83,22 @@ public class weatherActivity extends AppCompatActivity {
                             weatherData.getJSONArray("weather").getJSONObject(0).getString("description")
                     );
 
-                    Log.e("BRO", cityWeather.toString());
+                    /*Log.e("BRO", weatherData.toString());
+                    Log.e("BRO", cityWeather.toString());*/
 
-                    //tvTempCelsius.setText(String.valueOf(cityWeather.Temperature));
+                    tvTempCelsius.setText(String.valueOf(cityWeather.Temperature));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 revealTextViews();
 
-
                 Dialog.hide();
-
-                /*int iPlatos=0;
-
-                try {
-                    iPlatos = db.procesarPlatos(platos);
-                } catch (JSONException e) {
-                    icDialogos.showToastLargo(getApplicationContext(),"Se ha producido un error al procesar las mesas. " + e.getMessage());
-                    return;
-                }
-
-                if (iPlatos >= 0) {
-                    icDialogos.showSnackBarLargo(findViewById(android.R.id.content), "Se han procesado " + String.valueOf(iPlatos) + " platos.");
-                }*/
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Dialog.hide();
             }
 
         });
