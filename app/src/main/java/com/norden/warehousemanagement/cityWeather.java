@@ -1,6 +1,7 @@
 package com.norden.warehousemanagement;
 
 public class cityWeather {
+    public String CityName;
     public double Temperature;
     public double MaxTemp;
     public double MinTemp;
@@ -8,7 +9,8 @@ public class cityWeather {
     public String Description;
     public String WeatherIcon;
 
-    public cityWeather(double temperature, double maxTemp, double minTemp, double realFeelTemp, String description, String weatherIcon) {
+    public cityWeather(String cityName, double temperature, double maxTemp, double minTemp, double realFeelTemp, String description, String weatherIcon) {
+        CityName = cityName;
         Temperature = temperature - 273.15;
         MaxTemp = maxTemp - 273.15;
         MinTemp = minTemp - 273.15;
@@ -57,6 +59,13 @@ public class cityWeather {
     }
     public void setWeatherIcon(String weatherIcon) {
         WeatherIcon = weatherIcon;
+    }
+
+    public String getCityName() {
+        return CityName;
+    }
+    public void setCityName(String cityName) {
+        CityName = cityName;
     }
 
     @Override
