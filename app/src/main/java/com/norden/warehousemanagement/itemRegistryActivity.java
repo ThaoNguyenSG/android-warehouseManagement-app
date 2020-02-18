@@ -155,7 +155,7 @@ public class itemRegistryActivity extends AppCompatActivity {
         lv.setAdapter(scMovements);
 
         if (scMovements.isEmpty()) {
-            myDialogs.showShortToast(this, "No s'ha trobat cap moviment");
+            myDialogs.showShortSnackbar(findViewById(R.id.coordinatorLayout), "No s'ha trobat cap moviment");
         }
     }
 

@@ -116,7 +116,7 @@ public class allMovementsActivity extends AppCompatActivity {
         lv.setAdapter(scMovements);
 
         if (scMovements.isEmpty()) {
-            myDialogs.showShortToast(this, "No s'ha trobat cap moviment");
+            myDialogs.showShortSnackbar(findViewById(R.id.coordinator2), "No s'ha trobat cap moviment");
         }
     }
 

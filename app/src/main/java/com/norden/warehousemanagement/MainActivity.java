@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(scItems);
 
         if (scItems.isEmpty() && firstTimeApp != 0) {
-            myDialogs.showShortToast(this, "No s'ha trobat cap article");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "No s'ha trobat cap article");
         }
 
         firstTimeApp++;
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(scItems);
 
         if (scItems.isEmpty()) {
-            myDialogs.showShortToast(this, "No s'ha trobat cap article en stock");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "No s'ha trobat cap article en stock");
         }
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(scItems);
 
         if (scItems.isEmpty()) {
-            myDialogs.showShortToast(this, "No s'ha trobat cap article sense stock");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "No s'ha trobat cap article sense stock");
         }
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
                 EditText editText = customLayout.findViewById(R.id.edtNum);
                 if (editText.getText().toString().length() > 5) {
-                    myDialogs.showShortToast(context, "El número es massa llarg!");
+                    myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "El número es massa llarg!");
                 }
                 else {
                     try {
@@ -389,10 +389,10 @@ public class MainActivity extends AppCompatActivity {
                 stockUpdate);
 
         if (addingStock) {
-            myDialogs.showShortToast(this, "S'ha afegit " + stock + " de stock");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "S'ha afegit " + stock + " de stock");
         }
         else {
-            myDialogs.showShortToast(this, "S'ha tret " + stock + " de stock");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "S'ha tret " + stock + " de stock");
         }
 
         refreshItems();

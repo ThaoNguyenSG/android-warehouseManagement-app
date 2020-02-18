@@ -96,7 +96,7 @@ public class itemActivity extends AppCompatActivity {
         tv = (TextView) findViewById(R.id.edtItemCode);
         String itemCode = tv.getText().toString();
         if (itemCode.trim().equals("")) {
-            myDialogs.showShortToast(this,"El codi de l'article ha d'estar informat");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "El codi de l'article ha d'estar informat");
             return;
         }
 
@@ -104,7 +104,7 @@ public class itemActivity extends AppCompatActivity {
         tv = (TextView) findViewById(R.id.edtDescription);
         String description = tv.getText().toString();
         if (description.trim().equals("")) {
-            myDialogs.showShortToast(this,"La descripció ha d'estar informada");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "La descripció ha d'estar informada");
             return;
         }
 
@@ -115,12 +115,12 @@ public class itemActivity extends AppCompatActivity {
             iPvp = Double.valueOf(tv.getText().toString().replaceAll(",", "."));
         }
         catch (Exception e) {
-            myDialogs.showShortToast(this,"El PVP ha de ser un numero");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "El PVP ha de ser un numero");
             return;
         }
 
         if ((iPvp < 0)) {
-            myDialogs.showShortToast(this,"El PVP ha de ser mínim 0");
+            myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "El PVP ha de ser mínim 0");
             return;
         }
 
@@ -138,7 +138,7 @@ public class itemActivity extends AppCompatActivity {
                 iStock = Integer.valueOf(tv.getText().toString());
             }
             catch (Exception e) {
-                myDialogs.showShortToast(this,"El stock ha de ser un numero enter");
+                myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "El stock ha de ser un numero enter");
                 return;
             }
         }
@@ -148,12 +148,12 @@ public class itemActivity extends AppCompatActivity {
         // Mirem si estem creant o estem guardant
         if (idItem == -1) {
             if (bd.itemCodeExists(tv.getText().toString())) {
-                myDialogs.showShortToast(this, "Ja existeix un article amb aquest codi");
+                myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "Ja existeix un article amb aquest codi");
                 return;
             }
             // El estoc ha de ser mínim 0 si estem creant
             if ((iStock < 0)) {
-                myDialogs.showShortToast(this,"El stock ha de ser mínim 0");
+                myDialogs.showShortSnackbar(findViewById(R.id.activity_main), "El stock ha de ser mínim 0");
                 return;
             }
 
